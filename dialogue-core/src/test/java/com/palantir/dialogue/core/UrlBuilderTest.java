@@ -114,7 +114,7 @@ public final class UrlBuilderTest {
     public void encodesQueryParams() throws Exception {
         assertThat(minimalUrl().queryParam("foo", "bar").build().toString()).isEqualTo("http://host:80?foo=bar");
         assertThat(minimalUrl().queryParam("question?&", "answer!&").build().toString())
-                .isEqualTo("http://host:80?question?%26=answer!%26");
+                .isEqualTo("http://host:80?question%3F%26=answer%21%26");
     }
 
     @Test
@@ -160,7 +160,7 @@ public final class UrlBuilderTest {
 
     @Test
     public void urlEncoder_encodeQuery_onlyEncodesNonReservedChars() {
-        String nonReserved = "aAzZ09!$'()*,;/?";
+        String nonReserved = "aAzZ09.-*_";
         assertThat(BaseUrl.UrlEncoder.encodeQueryNameOrValue(nonReserved)).isEqualTo(nonReserved);
         assertThat(BaseUrl.UrlEncoder.encodeQueryNameOrValue("@[]{}ßçö"))
                 .isEqualTo("%40%5B%5D%7B%7D%C3%9F%C3%A7%C3%B6");

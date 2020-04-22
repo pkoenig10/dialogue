@@ -31,8 +31,10 @@ import com.palantir.logsafe.SafeArg;
 import com.palantir.logsafe.UnsafeArg;
 import com.palantir.logsafe.exceptions.SafeIllegalArgumentException;
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -251,7 +253,11 @@ public final class BaseUrl {
         }
 
         static String encodeQueryNameOrValue(String nameOrValue) {
-            return encode(nameOrValue, IS_QUERY_CHAR);
+            try {
+                return URLEncoder.encode(nameOrValue, StandardCharsets.UTF_8.name());
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         // percent-encodes every byte in the source string with it's percent-encoded representation, except for
